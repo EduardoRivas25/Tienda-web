@@ -1,121 +1,110 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import logo from './assets/logo.png'
 import './App.css'
 
+function ArrowIcon() {
+  return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+}
+
+function EyeIcon({ visible }) {
+  return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.5-5.5 9.5-5.5 9.5 5.5 9.5 5.5-3.5 5.5-9.5 5.5S2.5 12 2.5 12Z" stroke="currentColor" strokeWidth="1.5" /><circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.5" />{!visible && <path d="m4 20 16-16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />}</svg>
+}
+
+function GoogleIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><text x="12" y="18" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="500" fontSize="21" fill="currentColor">G</text></svg>
+}
+
+function AppleIcon() {
+  return <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.7 19.5c-1.04 1.01-2.18.85-3.28.37-1.17-.5-2.24-.52-3.48 0-1.55.66-2.37.47-3.3-.37C3.36 14.04 4.09 5.73 10.08 5.4c1.47.08 2.5.8 3.36.87 1.28-.26 2.5-.98 3.87-.88 1.65.13 2.9.8 3.7 1.93-3.39 2.02-2.58 6.48.52 7.75-.62 1.63-1.43 3.25-2.83 4.43ZM13.31 5.3c-.15-2.43 1.81-4.44 4.08-4.63.31 2.79-2.53 4.86-4.08 4.63Z" /></svg>
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [mode, setMode] = useState('login')
+  const [showPassword, setShowPassword] = useState(false)
+  const [notice, setNotice] = useState('')
+  const [role, setRole] = useState('comprador')
+  const isRegister = mode === 'register'
+
+  function changeMode(nextMode) {
+    setMode(nextMode)
+    setNotice('')
+    setShowPassword(false)
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault()
+    if (!event.currentTarget.reportValidity()) return
+    setNotice(isRegister
+      ? 'Formulario listo. El registro estará disponible al conectar el servicio de cuentas.'
+      : 'Formulario listo. El inicio de sesión estará disponible al conectar el servicio de cuentas.')
+  }
+
+  function handleSocial(provider) {
+    setNotice(`El acceso con ${provider} estará disponible al conectar la autenticación.`)
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="site-shell">
+      <main id="inicio" className="login-layout">
+        <section className="editorial-panel" aria-labelledby="editorial-title">
+          <div className="panel-topline"><span>EL SIGUIENTE PASO EMPIEZA AQUÍ</span><span>01 — 03</span></div>
+          <div className="editorial-content">
+            <span className="eyebrow eyebrow-light">TU ESPACIO. TUS POSIBILIDADES.</span>
+            <h1 id="editorial-title">ENTRA.<br />DESCUBRE.<br /><span>CONECTA.</span></h1>
+            <p>Encuentra productos que te interesan o comparte los tuyos con nuevos compradores.</p>
+          </div>
+          <div className="editorial-end">
+            <a className="brand-mark" href="#inicio" aria-label="TecMart, inicio"><img src={logo} alt="TecMart" /></a>
+            <div className="panel-bottomline"><span>COMPRA Y VENTA EN UN MISMO LUGAR</span><span className="line-mark" aria-hidden="true" /></div>
+          </div>
+        </section>
 
-      <div className="ticks"></div>
+        <section className="form-panel" aria-labelledby="form-title">
+          <div className="form-content">
+            <div className="form-intro">
+              <span className="eyebrow">{isRegister ? 'EMPIEZA AQUÍ' : 'QUÉ BUENO VERTE DE NUEVO'}</span>
+              <h2 id="form-title">{isRegister ? 'Crea tu cuenta' : 'Inicia sesión'}</h2>
+              <p>{isRegister ? 'Elige cómo quieres participar en la tienda.' : 'Accede a tu cuenta para continuar.'}</p>
+            </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+            <form key={mode} className="access-form" onSubmit={handleSubmit}>
+              {isRegister && <>
+                <div className="field"><label htmlFor="name">Nombre completo</label><input id="name" name="name" type="text" autoComplete="name" placeholder="Tu nombre" minLength="2" required /></div>
+                <fieldset className="role-fieldset">
+                  <legend>Quiero usar mi cuenta para</legend>
+                  <div className="role-options">
+                    <label className={role === 'comprador' ? 'role-option selected' : 'role-option'}><input type="radio" name="role" value="comprador" checked={role === 'comprador'} onChange={() => setRole('comprador')} />Comprar</label>
+                    <label className={role === 'vendedor' ? 'role-option selected' : 'role-option'}><input type="radio" name="role" value="vendedor" checked={role === 'vendedor'} onChange={() => setRole('vendedor')} />Vender</label>
+                  </div>
+                </fieldset>
+              </>}
+              <div className="field"><label htmlFor="email">Correo electrónico</label><input id="email" name="email" type="email" autoComplete="email" placeholder="nombre@correo.com" required /></div>
+              <div className="field">
+                <label htmlFor="password">Contraseña</label>
+                <div className="password-control">
+                  <input id="password" name="password" type={showPassword ? 'text' : 'password'} autoComplete={isRegister ? 'new-password' : 'current-password'} placeholder={isRegister ? 'Mínimo 8 caracteres' : 'Ingresa tu contraseña'} minLength={isRegister ? 8 : undefined} required />
+                  <button className="visibility-button" type="button" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'} aria-pressed={showPassword}><EyeIcon visible={showPassword} /></button>
+                </div>
+              </div>
+              <button className="submit-button" type="submit"><span>{isRegister ? 'Crear cuenta' : 'Entrar a mi cuenta'}</span><ArrowIcon /></button>
+            </form>
+            <div className="social-login">
+              <div className="social-divider"><span>O CONTINÚA CON</span></div>
+              <div className="social-buttons">
+                <button type="button" onClick={() => handleSocial('Google')}><GoogleIcon /><span>Google</span></button>
+                <button type="button" onClick={() => handleSocial('Apple')}><AppleIcon /><span>Apple</span></button>
+              </div>
+            </div>
+            {notice && <p className="form-notice" role="status">{notice}</p>}
+            <div className="form-switch">
+              <span>{isRegister ? '¿Ya tienes una cuenta?' : '¿Aún no tienes una cuenta?'}</span>
+              <button type="button" onClick={() => changeMode(isRegister ? 'login' : 'register')}>{isRegister ? 'Inicia sesión' : 'Crear cuenta'} <ArrowIcon /></button>
+            </div>
+          </div>
+          <div className="form-footer"><span>TECMART</span><span>COMPRA Y VENTA, SIN COMPLICACIONES.</span></div>
+        </section>
+      </main>
+    </div>
   )
 }
 
