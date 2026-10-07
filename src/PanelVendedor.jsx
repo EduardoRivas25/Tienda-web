@@ -14,10 +14,8 @@ export default function PanelVendedor() {
   const [showModal, setShowModal] = useState(false)
   const [notice, setNotice] = useState('')
 
-  // Lista de productos inicia vacía
   const [productos, setProductos] = useState([])
 
-  // Estado para el formulario de añadir producto
   const [nuevo, setNuevo] = useState({ nombre: '', descripcion: '', precio: '', stock: '', imagen: null })
 
   function handleStockChange(id, delta) {

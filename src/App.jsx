@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import logo from './assets/logo.png'
 import './App.css'
-import PanelVendedor from './PanelVendedor.jsx' // 1. Importamos tu panel de vendedor
+import PanelVendedor from './PanelVendedor.jsx' 
 
 function ArrowIcon() {
   return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -24,7 +24,7 @@ function App() {
   const [showPassword, setShowPassword] = useState(false)
   const [notice, setNotice] = useState('')
   const [role, setRole] = useState('comprador')
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // Estado para controlar si ya entró
+  const [isLoggedIn, setIsLoggedIn] = useState(false) 
   const isRegister = mode === 'register'
 
   function changeMode(nextMode) {
@@ -35,7 +35,7 @@ function App() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    // Al dar clic en entrar, cambiamos el estado para que muestre tu PanelVendedor
+    
     setIsLoggedIn(true)
   }
 
@@ -43,7 +43,7 @@ function App() {
     setNotice(`El acceso con ${provider} estará disponible al conectar la autenticación.`)
   }
 
-  // Si ya inició sesión, renderizamos directamente tu Panel Vendedor
+  
   if (isLoggedIn) {
     return <PanelVendedor />
   }
