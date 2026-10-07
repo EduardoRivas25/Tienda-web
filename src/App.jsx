@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import logo from './assets/logo.png'
 import './App.css'
+import CompradorPanel from './CompradorPanel.jsx'
 import PanelVendedor from './PanelVendedor.jsx' 
 
 function ArrowIcon() {
@@ -24,7 +25,8 @@ function App() {
   const [showPassword, setShowPassword] = useState(false)
   const [notice, setNotice] = useState('')
   const [role, setRole] = useState('comprador')
-  const [isLoggedIn, setIsLoggedIn] = useState(false) 
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [activeView, setActiveView] = useState('comprador')
   const isRegister = mode === 'register'
 
   function changeMode(nextMode) {
@@ -35,7 +37,8 @@ function App() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    
+
+    setActiveView(role)
     setIsLoggedIn(true)
   }
 
@@ -43,9 +46,17 @@ function App() {
     setNotice(`El acceso con ${provider} estará disponible al conectar la autenticación.`)
   }
 
-  
+  function handleViewChange(nextView) {
+    setActiveView(nextView)
+    setIsLoggedIn(true)
+  }
+
   if (isLoggedIn) {
-    return <PanelVendedor />
+    if (activeView === 'comprador') {
+      return <CompradorPanel onViewChange={handleViewChange} />
+    }
+
+    return <PanelVendedor onViewChange={handleViewChange} />
   }
 
   return (
@@ -106,7 +117,13 @@ function App() {
               <button type="button" onClick={() => changeMode(isRegister ? 'login' : 'register')}>{isRegister ? 'Inicia sesión' : 'Crear cuenta'} <ArrowIcon /></button>
             </div>
           </div>
-          <div className="form-footer"><span>TECMART</span><span>COMPRA Y VENTA, SIN COMPLICACIONES.</span></div>
+          <div className="form-footer">
+            <span>TECMART</span>
+            <button className="login-view-switch" type="button" onClick={() => setRole(role === 'comprador' ? 'vendedor' : 'comprador')}>
+              Ver vista {role === 'comprador' ? 'vendedor' : 'comprador'}
+            </button>
+            <span>COMPRA Y VENTA, SIN COMPLICACIONES.</span>
+          </div>
         </section>
       </main>
     </div>

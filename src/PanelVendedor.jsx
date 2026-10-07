@@ -10,7 +10,7 @@ function PlusIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
 }
 
-export default function PanelVendedor() {
+export default function PanelVendedor({ onViewChange }) {
   const [showModal, setShowModal] = useState(false)
   const [notice, setNotice] = useState('')
 
@@ -54,9 +54,9 @@ export default function PanelVendedor() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           <img src={logo} alt="TecMart" style={{ width: '110px', background: '#fff', padding: '3px 8px' }} />
           <nav style={{ display: 'flex', gap: '16px' }}>
-            <span style={{ color: '#929292', fontSize: '14px', fontWeight: 500, paddingBottom: '4px', cursor: 'default' }}>
-              Comprar 
-            </span>
+            <button type="button" onClick={() => onViewChange('comprador')} style={{ color: '#fff', background: 'none', border: 0, borderBottom: '2px solid #fff', padding: '0 0 4px', fontSize: '14px', fontWeight: 500, cursor: 'pointer' }}>
+              Comprar
+            </button>
             <span style={{ color: '#fff', fontSize: '14px', fontWeight: 500, paddingBottom: '4px', borderBottom: '2px solid #fff', cursor: 'default' }}>
               Tus Productos
             </span>
