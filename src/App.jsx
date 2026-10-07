@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import logo from './assets/logo.png'
 import './App.css'
+import PanelVendedor from './PanelVendedor.jsx' // 1. Importamos tu panel de vendedor
 
 function ArrowIcon() {
   return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -23,6 +24,7 @@ function App() {
   const [showPassword, setShowPassword] = useState(false)
   const [notice, setNotice] = useState('')
   const [role, setRole] = useState('comprador')
+  const [isLoggedIn, setIsLoggedIn] = useState(false) // Estado para controlar si ya entró
   const isRegister = mode === 'register'
 
   function changeMode(nextMode) {
@@ -33,14 +35,17 @@ function App() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    if (!event.currentTarget.reportValidity()) return
-    setNotice(isRegister
-      ? 'Formulario listo. El registro estará disponible al conectar el servicio de cuentas.'
-      : 'Formulario listo. El inicio de sesión estará disponible al conectar el servicio de cuentas.')
+    // Al dar clic en entrar, cambiamos el estado para que muestre tu PanelVendedor
+    setIsLoggedIn(true)
   }
 
   function handleSocial(provider) {
     setNotice(`El acceso con ${provider} estará disponible al conectar la autenticación.`)
+  }
+
+  // Si ya inició sesión, renderizamos directamente tu Panel Vendedor
+  if (isLoggedIn) {
+    return <PanelVendedor />
   }
 
   return (
@@ -69,7 +74,7 @@ function App() {
 
             <form key={mode} className="access-form" onSubmit={handleSubmit}>
               {isRegister && <>
-                <div className="field"><label htmlFor="name">Nombre completo</label><input id="name" name="name" type="text" autoComplete="name" placeholder="Tu nombre" minLength="2" required /></div>
+                <div className="field"><label htmlFor="name">Nombre completo</label><input id="name" name="name" type="text" autoComplete="name" placeholder="Tu nombre" minLength="2" /></div>
                 <fieldset className="role-fieldset">
                   <legend>Quiero usar mi cuenta para</legend>
                   <div className="role-options">
@@ -78,11 +83,11 @@ function App() {
                   </div>
                 </fieldset>
               </>}
-              <div className="field"><label htmlFor="email">Correo electrónico</label><input id="email" name="email" type="email" autoComplete="email" placeholder="nombre@correo.com" required /></div>
+              <div className="field"><label htmlFor="email">Correo electrónico</label><input id="email" name="email" type="email" autoComplete="email" placeholder="nombre@correo.com" /></div>
               <div className="field">
                 <label htmlFor="password">Contraseña</label>
                 <div className="password-control">
-                  <input id="password" name="password" type={showPassword ? 'text' : 'password'} autoComplete={isRegister ? 'new-password' : 'current-password'} placeholder={isRegister ? 'Mínimo 8 caracteres' : 'Ingresa tu contraseña'} minLength={isRegister ? 8 : undefined} required />
+                  <input id="password" name="password" type={showPassword ? 'text' : 'password'} autoComplete={isRegister ? 'new-password' : 'current-password'} placeholder={isRegister ? 'Mínimo 8 caracteres' : 'Ingresa tu contraseña'} minLength={isRegister ? 8 : undefined} />
                   <button className="visibility-button" type="button" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'} aria-pressed={showPassword}><EyeIcon visible={showPassword} /></button>
                 </div>
               </div>
