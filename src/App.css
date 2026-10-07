@@ -54,7 +54,9 @@
 .form-switch button { border: 0; background: none; color: var(--color-obsidian); padding: 0; display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; white-space: nowrap; }
 .form-switch button:hover { text-decoration: underline; text-underline-offset: 4px; }
 .form-switch svg { width: 16px; height: 16px; }
-.form-footer { padding: 0 clamp(24px, 4vw, 64px) 24px; display: flex; justify-content: space-between; gap: 20px; color: var(--color-steel); font-size: 10px; letter-spacing: .12em; }
+.form-footer { padding: 0 clamp(24px, 4vw, 64px) 24px; display: flex; justify-content: space-between; align-items: center; gap: 20px; color: var(--color-steel); font-size: 10px; letter-spacing: .12em; }
+.login-view-switch { border: 0; padding: 0; background: transparent; color: var(--color-obsidian); font: inherit; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.login-view-switch:hover { text-decoration: underline; text-underline-offset: 4px; }
 @media (max-width: 900px) {
   .login-layout { grid-template-columns: minmax(0, 42%) minmax(0, 58%); }
   .editorial-panel { min-height: 650px; padding-inline: 32px; }
