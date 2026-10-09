@@ -38,9 +38,55 @@
 .role-option { min-height: 48px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--color-concrete-gray); font-size: 14px; cursor: pointer; }
 .role-option.selected { border-color: var(--color-obsidian); background: var(--color-soft-mist); }
 .role-option input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.submit-button { width: 100%; min-height: 52px; padding: 10px 20px; margin-top: 4px; display: flex; justify-content: space-between; align-items: center; gap: 16px; border: 0; border-radius: 30px; background: var(--color-obsidian); color: var(--color-paper-white); font-size: 15px; font-weight: 500; transition: opacity .2s ease; }
+.submit-button { width: 100%; min-height: 52px; padding: 10px 20px; margin-top: 4px; display: flex; justify-content: space-between; align-items: center; gap: 16px; border: 0; border-radius: 30px; background: var(--color-obsidian); color: var(--color-paper-white); font-size: 15px; font-weight: 500; transition: opacity .2s ease; cursor: pointer; }
 .submit-button:hover { opacity: .78; }
 .submit-button svg, .form-switch svg { width: 20px; height: 20px; }
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin-bottom: 22px;
+  color: var(--color-steel);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color .2s ease, transform .2s ease;
+}
+.back-button:hover {
+  color: var(--color-obsidian);
+  transform: translateX(-3px);
+}
+.back-button svg {
+  width: 17px;
+  height: 17px;
+}
+
+.cancel-button {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 20px;
+  margin-top: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--color-concrete-gray);
+  border-radius: 30px;
+  background: transparent;
+  color: var(--color-obsidian);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.cancel-button:hover {
+  background: var(--color-soft-mist);
+  border-color: var(--color-obsidian);
+}
+
 .social-login { margin-top: 30px; }
 .social-divider { display: flex; align-items: center; gap: 15px; color: var(--color-steel); font-size: 10px; letter-spacing: .14em; white-space: nowrap; }
 .social-divider::before, .social-divider::after { content: ''; height: 1px; flex: 1; background: var(--color-concrete-gray); }
@@ -105,3 +151,127 @@
   .form-switch { align-items: flex-start; flex-direction: column; }
   .form-footer span:last-child { display: none; }
 }
+
+/* Validaciones y Alertas de Login */
+.field input.input-error {
+  border-color: #d93838;
+  background-color: #fff9f9;
+}
+
+.field-error {
+  font-size: 12px;
+  color: #c92a2a;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.form-alert {
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.form-alert--error {
+  background: #fff0f0;
+  border-left: 3px solid #d93838;
+  color: #a71d1d;
+  font-weight: 500;
+}
+
+/* Sugerencia de credenciales locales */
+.demo-account-hint {
+  margin-top: 18px;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border: 1px dashed var(--color-concrete-gray);
+  border-radius: 4px;
+  font-size: 12px;
+  color: #495057;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.demo-account-hint-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.demo-account-hint-header strong {
+  color: var(--color-obsidian);
+  font-weight: 600;
+}
+
+.demo-account-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: #e9ecef;
+  color: #495057;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.demo-account-hint p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.demo-account-hint code {
+  background: #e9ecef;
+  padding: 2px 5px;
+  font-family: monospace;
+  font-size: 12px;
+  border-radius: 3px;
+  color: var(--color-obsidian);
+}
+
+.demo-fill-btn {
+  border: 1px solid var(--color-obsidian);
+  background: transparent;
+  color: var(--color-obsidian);
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 20px;
+  align-self: flex-start;
+  transition: all .2s ease;
+}
+
+.demo-fill-btn:hover {
+  background: var(--color-obsidian);
+  color: var(--color-paper-white);
+}
+
+/* Toast flotante idéntico al de PanelVendedor */
+.toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 999;
+  max-width: min(380px, calc(100vw - 48px));
+  padding: 14px 18px;
+  background: var(--color-obsidian);
+  color: var(--color-paper-white);
+  border-left: 3px solid #3fd97e;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+  font-size: 13px;
+  animation: slideToastIn 0.25s ease-out;
+}
+
+@keyframes slideToastIn {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+

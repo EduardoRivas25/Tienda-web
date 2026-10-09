@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from 'react'
 import logo from './assets/logo.png'
 import './PanelVendedor.css'
+import { PRODUCTOS_INICIALES } from './CompradorPanel.jsx'
 
 function PlusIcon() {
   return (
@@ -28,7 +29,14 @@ export default function PanelVendedor({ onViewChange }) {
 
   const [productos, setProductos] = useState(() => {
     const guardados = localStorage.getItem('tecmart_vendedor_productos')
-    return guardados ? JSON.parse(guardados) : []
+    if (guardados) {
+      try {
+        return JSON.parse(guardados)
+      } catch {
+        return PRODUCTOS_INICIALES
+      }
+    }
+    return PRODUCTOS_INICIALES
   })
 
   useEffect(() => {
@@ -155,6 +163,11 @@ export default function PanelVendedor({ onViewChange }) {
           <button className="nav-button nav-button--primary" type="button" onClick={abrirModalNuevo}>
             + Añadir producto
           </button>
+          {onViewChange && (
+            <button className="nav-button" type="button" onClick={() => onViewChange('login')} title="Cerrar sesión local">
+              Cerrar sesión
+            </button>
+          )}
         </div>
       </header>
 

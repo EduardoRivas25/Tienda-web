@@ -2,46 +2,58 @@ import { useMemo, useState } from 'react'
 import logo from './assets/logo.png'
 import './CompradorPanel.css'
 
-const productos = [
+export const PRODUCTOS_INICIALES = [
   {
     id: 1,
     nombre: 'Zapatilla Urbana Pro',
+    descripcion: 'Diseño ergonómico y suela antideslizante para uso diario.',
     precio: 1899,
+    stock: 12,
     categoria: 'Calzado',
     imagen: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85'
   },
   {
     id: 2,
     nombre: 'Camiseta Essential',
+    descripcion: 'Algodón peinado premium, corte regular y transpirable.',
     precio: 649,
+    stock: 25,
     categoria: 'Moda',
     imagen: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85'
   },
   {
     id: 3,
     nombre: 'Bolso Everyday',
+    descripcion: 'Compartimentos funcionales y acabado resistente al agua.',
     precio: 1199,
+    stock: 8,
     categoria: 'Accesorios',
     imagen: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=85'
   },
   {
     id: 4,
     nombre: 'Watch Minimal',
+    descripcion: 'Caja metálica ultradelgada y correa intercambiable.',
     precio: 2499,
+    stock: 5,
     categoria: 'Accesorios',
     imagen: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=85'
   },
   {
     id: 5,
     nombre: 'Gafas Deportivas',
+    descripcion: 'Lentes polarizados con protección UV400 y marco ligero.',
     precio: 899,
+    stock: 15,
     categoria: 'Deporte',
     imagen: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=85'
   },
   {
     id: 6,
     nombre: 'Boleto Tecnológico',
+    descripcion: 'Estilo urbano contemporáneo y materiales sustentables.',
     precio: 1499,
+    stock: 10,
     categoria: 'Moda',
     imagen: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85'
   }
@@ -72,15 +84,27 @@ export default function CompradorPanel({ onViewChange }) {
   const [carritoAbierto, setCarritoAbierto] = useState(false)
   const [mensaje, setMensaje] = useState('')
 
+  const [productos] = useState(() => {
+    const guardados = localStorage.getItem('tecmart_vendedor_productos')
+    if (guardados) {
+      try {
+        return JSON.parse(guardados)
+      } catch {
+        return PRODUCTOS_INICIALES
+      }
+    }
+    return PRODUCTOS_INICIALES
+  })
+
   const productosFiltrados = useMemo(() => {
     const termino = busqueda.trim().toLocaleLowerCase('es')
 
     if (!termino) return productos
 
     return productos.filter((producto) =>
-      `${producto.nombre} ${producto.categoria}`.toLocaleLowerCase('es').includes(termino)
+      `${producto.nombre} ${producto.categoria} ${producto.descripcion || ''}`.toLocaleLowerCase('es').includes(termino)
     )
-  }, [busqueda])
+  }, [busqueda, productos])
 
   const cantidadCarrito = carrito.reduce((total, item) => total + item.cantidad, 0)
   const subtotal = carrito.reduce(
@@ -150,6 +174,11 @@ export default function CompradorPanel({ onViewChange }) {
             <CartIcon />
             {cantidadCarrito > 0 && <span>{cantidadCarrito}</span>}
           </button>
+          {onViewChange && (
+            <button className="nav-button" type="button" onClick={() => onViewChange('login')} title="Cerrar sesión local">
+              Cerrar sesión
+            </button>
+          )}
         </div>
       </header>
 
