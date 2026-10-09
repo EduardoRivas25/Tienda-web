@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import logo from './assets/logo.png'
 import './CompradorPanel.css'
 
@@ -84,7 +84,7 @@ export default function CompradorPanel({ onViewChange }) {
   const [carritoAbierto, setCarritoAbierto] = useState(false)
   const [mensaje, setMensaje] = useState('')
 
-  const [productos] = useState(() => {
+  const [productos, setProductos] = useState(() => {
     const guardados = localStorage.getItem('tecmart_vendedor_productos')
     if (guardados) {
       try {
@@ -95,6 +95,26 @@ export default function CompradorPanel({ onViewChange }) {
     }
     return PRODUCTOS_INICIALES
   })
+
+  useEffect(() => {
+    function sincronizarProductos(event) {
+      if (event.key && event.key !== 'tecmart_vendedor_productos') return
+
+      const guardados = localStorage.getItem('tecmart_vendedor_productos')
+      if (guardados) {
+        try {
+          setProductos(JSON.parse(guardados))
+        } catch {
+          setProductos(PRODUCTOS_INICIALES)
+        }
+      } else {
+        setProductos(PRODUCTOS_INICIALES)
+      }
+    }
+
+    window.addEventListener('storage', sincronizarProductos)
+    return () => window.removeEventListener('storage', sincronizarProductos)
+  }, [])
 
   const productosFiltrados = useMemo(() => {
     const termino = busqueda.trim().toLocaleLowerCase('es')
