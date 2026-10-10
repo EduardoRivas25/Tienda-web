@@ -92,6 +92,7 @@
   background: transparent;
   color: var(--comprador-ink);
   font: inherit;
+  cursor: pointer;
 }
 
 .nav-button {
@@ -108,30 +109,39 @@
   color: var(--comprador-white);
 }
 
+.nav-button--vendor {
+  background: transparent;
+}
+
 .carrito-button {
   position: relative;
   width: 44px;
   height: 44px;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--comprador-line);
   border-radius: 50%;
+  background: var(--comprador-white);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .carrito-button:hover {
   background: var(--comprador-ink);
   color: var(--comprador-white);
+  border-color: var(--comprador-ink);
 }
 
 .carrito-button span {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: -4px;
+  right: -4px;
   min-width: 20px;
   height: 20px;
   padding: 0 5px;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #d94d3f;
   color: #fff;
   border: 2px solid #fff;
@@ -221,7 +231,7 @@
 .catalogo-heading {
   margin-bottom: 30px;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 30px;
 }
@@ -321,6 +331,7 @@
   font: inherit;
   font-size: 12px;
   font-weight: 600;
+  cursor: pointer;
   transition: opacity 0.2s ease;
 }
 
@@ -356,7 +367,7 @@
   padding: 14px 18px;
   background: var(--comprador-ink);
   color: var(--comprador-white);
-  border-left: 3px solid #d94d3f;
+  border-left: 3px solid #3fd97e;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
   font-size: 13px;
 }
@@ -407,6 +418,10 @@
   color: var(--comprador-ink);
   font-size: 26px;
   line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .close-cart:hover {
@@ -475,6 +490,7 @@
   color: #a33d35;
   font: inherit;
   font-size: 12px;
+  cursor: pointer;
 }
 
 .cart-item-bottom button:hover {
@@ -516,6 +532,8 @@
   font: inherit;
   font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
 .checkout-button:hover {
@@ -575,6 +593,13 @@
   font: inherit;
   font-size: 12px;
   font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.cart-empty button:hover {
+  background: var(--comprador-ink);
+  color: var(--comprador-white);
 }
 
 @keyframes fade-in {

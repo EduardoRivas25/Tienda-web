@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import logo from './assets/logo.png'
 import './CompradorPanel.css'
 
-export const PRODUCTOS_INICIALES = [
+export const PRODUCTOS_VENDEDOR_INICIALES = [
   {
-    id: 1,
+    id: 101,
     nombre: 'Zapatilla Urbana Pro',
     descripcion: 'Diseño ergonómico y suela antideslizante para uso diario.',
     precio: 1899,
@@ -13,7 +13,7 @@ export const PRODUCTOS_INICIALES = [
     imagen: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85'
   },
   {
-    id: 2,
+    id: 102,
     nombre: 'Camiseta Essential',
     descripcion: 'Algodón peinado premium, corte regular y transpirable.',
     precio: 649,
@@ -22,7 +22,7 @@ export const PRODUCTOS_INICIALES = [
     imagen: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85'
   },
   {
-    id: 3,
+    id: 103,
     nombre: 'Bolso Everyday',
     descripcion: 'Compartimentos funcionales y acabado resistente al agua.',
     precio: 1199,
@@ -31,7 +31,7 @@ export const PRODUCTOS_INICIALES = [
     imagen: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=85'
   },
   {
-    id: 4,
+    id: 104,
     nombre: 'Watch Minimal',
     descripcion: 'Caja metálica ultradelgada y correa intercambiable.',
     precio: 2499,
@@ -40,28 +40,67 @@ export const PRODUCTOS_INICIALES = [
     imagen: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=85'
   },
   {
-    id: 5,
+    id: 105,
     nombre: 'Gafas Deportivas',
     descripcion: 'Lentes polarizados con protección UV400 y marco ligero.',
     precio: 899,
     stock: 15,
     categoria: 'Deporte',
     imagen: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=85'
+  }
+]
+
+export const PRODUCTOS_EXTERNOS = [
+  {
+    id: 201,
+    nombre: 'Teclado Mecánico RGB (Externo)',
+    descripcion: 'Switches táctiles e iluminación personalizable. Vendedor: Carlos M.',
+    precio: 1599,
+    stock: 10,
+    categoria: 'Tecnología',
+    imagen: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=900&q=85'
   },
   {
-    id: 6,
-    nombre: 'Boleto Tecnológico',
-    descripcion: 'Estilo urbano contemporáneo y materiales sustentables.',
-    precio: 1499,
-    stock: 10,
-    categoria: 'Moda',
-    imagen: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85'
+    id: 202,
+    nombre: 'Audífonos Inalámbricos ANC (Externo)',
+    descripcion: 'Cancelación activa de ruido. Vendedor: Sofía R.',
+    precio: 2899,
+    stock: 6,
+    categoria: 'Tecnología',
+    imagen: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85'
+  },
+  {
+    id: 203,
+    nombre: 'Termo Inteligente LED (Externo)',
+    descripcion: 'Pantalla táctil de temperatura. Vendedor: Luis G.',
+    precio: 599,
+    stock: 20,
+    categoria: 'Accesorios',
+    imagen: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=85'
+  },
+  {
+    id: 204,
+    nombre: 'Mochila Hiking Pro (Externo)',
+    descripcion: 'Gran capacidad y soporte ergonómico. Vendedor: Andrea P.',
+    precio: 1399,
+    stock: 9,
+    categoria: 'Deporte',
+    imagen: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=85'
+  },
+  {
+    id: 205,
+    nombre: 'Lámpara Escritorio LED (Externo)',
+    descripcion: 'Regulación de intensidad y tonos de luz. Vendedor: Mario T.',
+    precio: 799,
+    stock: 15,
+    categoria: 'Hogar',
+    imagen: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=900&q=85'
   }
 ]
 
 function CartIcon() {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.6L20 8H6" />
       <circle cx="10" cy="20" r="1" />
       <circle cx="18" cy="20" r="1" />
@@ -71,7 +110,7 @@ function CartIcon() {
 
 function SearchIcon() {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="11" cy="11" r="7" />
       <path d="m20 20-4-4" />
     </svg>
@@ -86,14 +125,15 @@ export default function CompradorPanel({ onViewChange }) {
 
   const [productos, setProductos] = useState(() => {
     const guardados = localStorage.getItem('tecmart_vendedor_productos')
+    let productosVendedor = PRODUCTOS_VENDEDOR_INICIALES
     if (guardados) {
       try {
-        return JSON.parse(guardados)
+        productosVendedor = JSON.parse(guardados)
       } catch {
-        return PRODUCTOS_INICIALES
+        productosVendedor = PRODUCTOS_VENDEDOR_INICIALES
       }
     }
-    return PRODUCTOS_INICIALES
+    return [...productosVendedor, ...PRODUCTOS_EXTERNOS]
   })
 
   useEffect(() => {
@@ -101,15 +141,15 @@ export default function CompradorPanel({ onViewChange }) {
       if (event.key && event.key !== 'tecmart_vendedor_productos') return
 
       const guardados = localStorage.getItem('tecmart_vendedor_productos')
+      let productosVendedor = PRODUCTOS_VENDEDOR_INICIALES
       if (guardados) {
         try {
-          setProductos(JSON.parse(guardados))
+          productosVendedor = JSON.parse(guardados)
         } catch {
-          setProductos(PRODUCTOS_INICIALES)
+          productosVendedor = PRODUCTOS_VENDEDOR_INICIALES
         }
-      } else {
-        setProductos(PRODUCTOS_INICIALES)
       }
+      setProductos([...productosVendedor, ...PRODUCTOS_EXTERNOS])
     }
 
     window.addEventListener('storage', sincronizarProductos)
@@ -118,24 +158,18 @@ export default function CompradorPanel({ onViewChange }) {
 
   const productosFiltrados = useMemo(() => {
     const termino = busqueda.trim().toLocaleLowerCase('es')
-
     if (!termino) return productos
-
     return productos.filter((producto) =>
       `${producto.nombre} ${producto.categoria} ${producto.descripcion || ''}`.toLocaleLowerCase('es').includes(termino)
     )
   }, [busqueda, productos])
 
   const cantidadCarrito = carrito.reduce((total, item) => total + item.cantidad, 0)
-  const subtotal = carrito.reduce(
-    (total, item) => total + item.precio * item.cantidad,
-    0
-  )
+  const subtotal = carrito.reduce((total, item) => total + item.precio * item.cantidad, 0)
 
   function agregarAlCarrito(producto) {
     setCarrito((items) => {
       const productoExistente = items.find((item) => item.id === producto.id)
-
       if (productoExistente) {
         return items.map((item) =>
           item.id === producto.id
@@ -143,7 +177,6 @@ export default function CompradorPanel({ onViewChange }) {
             : item
         )
       }
-
       return [...items, { ...producto, cantidad: 1 }]
     })
 
@@ -156,6 +189,18 @@ export default function CompradorPanel({ onViewChange }) {
   }
 
   function confirmarCompra() {
+    if (carrito.length === 0) return
+
+    const nuevaCompra = {
+      id: Date.now(),
+      fecha: new Date().toLocaleString(),
+      items: carrito,
+      total: subtotal
+    }
+
+    const historialActual = JSON.parse(localStorage.getItem('tecmart_historial_compras') || '[]')
+    localStorage.setItem('tecmart_historial_compras', JSON.stringify([nuevaCompra, ...historialActual]))
+
     setMensaje('Compra confirmada. Gracias por usar TecMart.')
     setCarrito([])
     setCarritoAbierto(false)
@@ -181,9 +226,11 @@ export default function CompradorPanel({ onViewChange }) {
         </label>
 
         <div className="nav-actions">
-          <button className="nav-button nav-button--vendor" type="button" onClick={() => onViewChange('vendedor')}>
-            Ver vendedor
-          </button>
+          {onViewChange && (
+            <button className="nav-button nav-button--vendor" type="button" onClick={() => onViewChange('vendedor')}>
+              Ver vendedor
+            </button>
+          )}
           <button
             className="carrito-button"
             type="button"

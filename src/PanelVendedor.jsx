@@ -1,7 +1,6 @@
 import { useMemo, useState, useEffect } from 'react'
 import logo from './assets/logo.png'
 import './PanelVendedor.css'
-import { PRODUCTOS_INICIALES } from './CompradorPanel.jsx'
 
 function PlusIcon() {
   return (
@@ -21,9 +20,58 @@ function SearchIcon() {
   )
 }
 
+const PRODUCTOS_INICIALES_VENDEDOR = [
+  {
+    id: 101,
+    nombre: 'Zapatilla Urbana Pro',
+    descripcion: 'Calzado cómodo para uso diario.',
+    precio: 1899,
+    stock: 10,
+    categoria: 'Calzado',
+    imagen: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85'
+  },
+  {
+    id: 102,
+    nombre: 'Camiseta Essential',
+    descripcion: 'Algodón premium corte regular.',
+    precio: 649,
+    stock: 15,
+    categoria: 'Moda',
+    imagen: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85'
+  },
+  {
+    id: 103,
+    nombre: 'Bolso Everyday',
+    descripcion: 'Diseño compacto y resistente al agua.',
+    precio: 1199,
+    stock: 8,
+    categoria: 'Accesorios',
+    imagen: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=85'
+  },
+  {
+    id: 104,
+    nombre: 'Watch Minimal',
+    descripcion: 'Reloj analógico con correa de piel.',
+    precio: 2499,
+    stock: 4,
+    categoria: 'Accesorios',
+    imagen: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=85'
+  },
+  {
+    id: 105,
+    nombre: 'Gafas Deportivas',
+    descripcion: 'Protección UV400 para exteriores.',
+    precio: 899,
+    stock: 12,
+    categoria: 'Deporte',
+    imagen: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=85'
+  }
+]
+
 export default function PanelVendedor({ onViewChange }) {
   const [busqueda, setBusqueda] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const [showVentasModal, setShowVentasModal] = useState(false)
   const [editandoId, setEditandoId] = useState(null)
   const [mensaje, setMensaje] = useState('')
 
@@ -33,15 +81,44 @@ export default function PanelVendedor({ onViewChange }) {
       try {
         return JSON.parse(guardados)
       } catch {
-        return PRODUCTOS_INICIALES
+        return PRODUCTOS_INICIALES_VENDEDOR
       }
     }
-    return PRODUCTOS_INICIALES
+    localStorage.setItem('tecmart_vendedor_productos', JSON.stringify(PRODUCTOS_INICIALES_VENDEDOR))
+    return PRODUCTOS_INICIALES_VENDEDOR
   })
 
   useEffect(() => {
     localStorage.setItem('tecmart_vendedor_productos', JSON.stringify(productos))
   }, [productos])
+
+  const [historialCompras, setHistorialCompras] = useState(() => {
+    const compras = localStorage.getItem('tecmart_historial_compras')
+    return compras ? JSON.parse(compras) : []
+  })
+
+  function abrirModalVentas() {
+    const compras = localStorage.getItem('tecmart_historial_compras')
+    setHistorialCompras(compras ? JSON.parse(compras) : [])
+    setShowVentasModal(true)
+  }
+
+  const ventasDelVendedor = useMemo(() => {
+    const idsVendedor = new Set(productos.map(p => p.id))
+    const ventasFiltradas = []
+
+    historialCompras.forEach(compra => {
+      const itemsDelVendedor = compra.items.filter(item => idsVendedor.has(item.id))
+      if (itemsDelVendedor.length > 0) {
+        ventasFiltradas.push({
+          ...compra,
+          items: itemsDelVendedor
+        })
+      }
+    })
+
+    return ventasFiltradas
+  }, [historialCompras, productos])
 
   const [form, setForm] = useState({
     nombre: '',
@@ -155,6 +232,9 @@ export default function PanelVendedor({ onViewChange }) {
         </label>
 
         <div className="nav-actions">
+          <button className="nav-button" type="button" onClick={abrirModalVentas}>
+            Consultar Compras / Ventas
+          </button>
           {onViewChange && (
             <button className="nav-button nav-button--vendor" type="button" onClick={() => onViewChange('comprador')}>
               Ver comprador
@@ -163,11 +243,6 @@ export default function PanelVendedor({ onViewChange }) {
           <button className="nav-button nav-button--primary" type="button" onClick={abrirModalNuevo}>
             + Añadir producto
           </button>
-          {onViewChange && (
-            <button className="nav-button" type="button" onClick={() => onViewChange('login')} title="Cerrar sesión local">
-              Cerrar sesión
-            </button>
-          )}
         </div>
       </header>
 
@@ -176,7 +251,7 @@ export default function PanelVendedor({ onViewChange }) {
           <div>
             <span className="hero-kicker">PANEL DE VENDEDOR</span>
             <h1>Gestiona tu catálogo<br />y controla tu stock.</h1>
-            <p>Publica nuevos artículos, actualiza existencias y mantén tu inventario al día de forma local.</p>
+            <p>Publica nuevos artículos, actualiza existencias y revisa las ventas generadas.</p>
           </div>
           <div className="hero-visual" aria-hidden="true">
             <div className="hero-orbit hero-orbit--one" />
@@ -254,7 +329,7 @@ export default function PanelVendedor({ onViewChange }) {
           ) : (
             <div className="empty-results">
               <h3>No tienes productos registrados</h3>
-              <p>Comienza añadiendo tu primer artículo usando el botón superior o inferior.</p>
+              <p>Comienza añadiendo tu primer artículo usando el botón superior.</p>
               <button type="button" onClick={abrirModalNuevo}>Añadir producto</button>
             </div>
           )}
@@ -284,6 +359,54 @@ export default function PanelVendedor({ onViewChange }) {
       >
         <PlusIcon /> Añadir producto
       </button>
+
+      {showVentasModal && (
+        <div className="drawer-backdrop" role="presentation" onMouseDown={() => setShowVentasModal(false)}>
+          <div
+            className="cart-drawer"
+            style={{ width: 'min(540px, 100%)', padding: '0', display: 'flex', flexDirection: 'column' }}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <div className="cart-drawer-header">
+              <div>
+                <span className="section-kicker">HISTORIAL</span>
+                <h2>Ventas de tus productos</h2>
+              </div>
+              <button className="close-cart" type="button" onClick={() => setShowVentasModal(false)}>&times;</button>
+            </div>
+
+            <div style={{ padding: '24px 28px', overflowY: 'auto', flex: 1, display: 'grid', gap: '16px' }}>
+              {ventasDelVendedor.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--comprador-muted)' }}>
+                  <h3>No hay ventas de tus productos</h3>
+                  <p style={{ fontSize: '13px', marginTop: '6px' }}>
+                    Cuando un comprador adquiera artículos de tu inventario, aparecerán reflejados aquí. Las compras de productos de otros vendedores no se muestran en este panel.
+                  </p>
+                </div>
+              ) : (
+                ventasDelVendedor.map((venta, idx) => (
+                  <div key={idx} style={{ background: '#f9f8f6', border: '1px solid var(--comprador-line)', padding: '16px', borderRadius: '8px', display: 'grid', gap: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--comprador-muted)' }}>
+                      <span>Compra ID: #{venta.id}</span>
+                      <span>{venta.fecha}</span>
+                    </div>
+                    <div style={{ display: 'grid', gap: '8px', borderTop: '1px solid var(--comprador-line)', paddingTop: '10px' }}>
+                      {venta.items.map((item) => (
+                        <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '14px' }}>
+                          <div>
+                            <strong>{item.nombre}</strong> <span style={{ color: 'var(--comprador-muted)', fontSize: '12px' }}>(x{item.cantidad})</span>
+                          </div>
+                          <span>${(item.precio * item.cantidad).toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {showModal && (
         <div className="drawer-backdrop" role="presentation" onMouseDown={() => setShowModal(false)}>
